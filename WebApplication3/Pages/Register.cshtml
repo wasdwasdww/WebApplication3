@@ -1,0 +1,204 @@
+﻿@page
+@model WebApplication3.Pages.RegisterModel
+@{
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-sm-12 col-md-12 col-lg-6">
+            <h1 class="mb-3">Register </h1>
+            <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.FirstName">First Name</label>
+                    <input type="text" asp-for="RModel.FirstName" class="form-control" placeholder="Enter your first name"/>
+                    <span asp-validation-for="RModel.FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.LastName">Last Name</label>
+                    <input type="text" asp-for="RModel.LastName" class="form-control" placeholder="Enter your last name" />
+                    <span asp-validation-for="RModel.LastName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.CreditCardNo">Credit Card No</label>
+                    <input type="text" asp-for="RModel.CreditCardNo" class="form-control" placeholder="Eg. 5105105105105100" />
+                    <span asp-validation-for="RModel.CreditCardNo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.MobileNo">Mobile No</label>
+                    <input type="text" asp-for="RModel.MobileNo" class="form-control" placeholder="Eg. 85315531" />
+                    <span asp-validation-for="RModel.MobileNo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.BillingAddress">Billing Address</label>
+                    <input type="text" asp-for="RModel.BillingAddress" class="form-control" placeholder="Enter billing address" />
+                    <span asp-validation-for="RModel.BillingAddress" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.ShippingAddress">Shipping Address</label>
+                    <input type="text" asp-for="RModel.ShippingAddress" class="form-control" placeholder="Enter Shipping address" />
+                    <span asp-validation-for="RModel.ShippingAddress" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Email">Email Address</label>
+                    <input type="email" asp-for="RModel.Email" class="form-control" placeholder="Eg. john@gmail.com" />
+                    <span asp-validation-for="RModel.Email" class="text-danger"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Password">Password</label>
+                    <input type="password" asp-for="RModel.Password" class="form-control" placeholder="Enter Password" />
+                    <span asp-validation-for="RModel.Password" class="text-danger"></span>
+                    <div id="passwordStrength" class="password-strength"></div>
+                    <span id="passwordStrengthText" class="text-muted"></span>
+                </div>
+
+
+
+
+                <div class="mb-3">
+                    <label class="form-label" for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Re enter password" />
+                    <span class="text-danger" id="confirmPasswordError"></span>
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Photo">Photo (.JPG only)</label>
+                    <input type="file" asp-for="RModel.Photo" class="form-control" />
+                    <span asp-validation-for="RModel.Photo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        const passwordField = document.getElementById('RModel_Password');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const passwordStrength = document.getElementById('passwordStrength');
+
+        function validateConfirmPassword() {
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = "The password and confirmation password do not match.";
+                return false;
+            } else {
+                confirmPasswordError.textContent = "";
+                return true;
+            }
+        }
+        function validateForm() {
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = "The password and confirmation password do not match.";
+                return false; // Prevent form submission
+            } else {
+                confirmPasswordError.textContent = "";
+                return true; // Allow form submission
+            }
+        }
+
+
+        function checkPasswordStrength() {
+            const password = passwordField.value;
+            const strengthMeter = passwordStrength;
+            const strengthMeterText = document.getElementById('passwordStrengthText');
+
+            // Reset password strength indicator and tips
+            strengthMeter.textContent = '';
+            strengthMeterText.innerHTML = '';
+
+            // Regular expressions for password strength
+            const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!#$%^&*])(?=.{12,})/;
+            const mediumRegex = /^.{12,}$/;
+
+            // Track fulfilled requirements
+            let requirementsFulfilled = {
+                lowercase: false,
+                uppercase: false,
+                number: false,
+                specialChar: false
+            };
+
+            if (strongRegex.test(password)) {
+                strengthMeter.textContent = 'Strong';
+                strengthMeter.style.color = 'green';
+            } else if (mediumRegex.test(password)) {
+                strengthMeter.textContent = 'Medium';
+                strengthMeter.style.color = 'orange';
+                // Show tips for unfulfilled requirements
+                if (!requirementsFulfilled.lowercase) {
+                    strengthMeterText.innerHTML += 'Consider adding Lowercase letter<br>';
+                }
+                if (!requirementsFulfilled.uppercase) {
+                    strengthMeterText.innerHTML += 'Consider adding Uppercase Character<br>';
+                }
+                if (!requirementsFulfilled.number) {
+                    strengthMeterText.innerHTML += 'Consider adding number<br>';
+                }
+                if (!requirementsFulfilled.specialChar) {
+                    strengthMeterText.innerHTML += 'Consider adding special character<br>';
+                }
+            } else {
+                strengthMeter.textContent = 'Weak';
+                strengthMeter.style.color = 'red';
+                // Show all tips for weak password
+                strengthMeterText.innerHTML = 'Minimum 12 Characters<br>';
+                strengthMeterText.innerHTML += 'Consider adding Lowercase letter<br>';
+                strengthMeterText.innerHTML += 'Consider adding Uppercase Character<br>';
+                strengthMeterText.innerHTML += 'Consider adding number<br>';
+                strengthMeterText.innerHTML += 'Consider adding special character<br>';
+            }
+
+
+    // Check if requirements are fulfilled while typing
+    checkRequirementsFulfilled(password, requirementsFulfilled, strengthMeterText);
+}
+
+function checkRequirementsFulfilled(password, requirementsFulfilled, strengthMeterText) {
+    requirementsFulfilled.lowercase = /[a-z]/.test(password);
+    requirementsFulfilled.uppercase = /[A-Z]/.test(password);
+    requirementsFulfilled.number = /\d/.test(password);
+    requirementsFulfilled.specialChar = /[!#$%^&*]/.test(password);
+
+    // Remove hints as requirements are fulfilled
+    if (requirementsFulfilled.lowercase) {
+        strengthMeterText.innerHTML = strengthMeterText.innerHTML.replace('Consider adding Lowercase letter<br>', '');
+    }
+    if (requirementsFulfilled.uppercase) {
+        strengthMeterText.innerHTML = strengthMeterText.innerHTML.replace('Consider adding Uppercase Character<br>', '');
+    }
+    if (requirementsFulfilled.number) {
+        strengthMeterText.innerHTML = strengthMeterText.innerHTML.replace('Consider adding number<br>', '');
+    }
+    if (requirementsFulfilled.specialChar) {
+        strengthMeterText.innerHTML = strengthMeterText.innerHTML.replace('Consider adding special character<br>', '');
+    }
+}
+
+        // Event listeners for password and confirm password fields
+        passwordField.addEventListener('input', checkPasswordStrength);
+        confirmPasswordField.addEventListener('input', validateConfirmPassword);
+    </script>
+}
+

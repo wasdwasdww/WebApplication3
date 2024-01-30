@@ -1,0 +1,29 @@
+﻿@page
+@using Microsoft.AspNetCore.DataProtection;
+@model WebApplication3.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <p>Email: @Model.CurrentUser.Email</p>
+    <p>First Name: @Model.CurrentUser.FirstName</p>
+    <p>Last Name: @Model.CurrentUser.LastName</p>
+    <p>Encrypted Credit Card No: @Model.CurrentUser.CreditCard</p>
+
+    @{
+        // Decrypt the credit card number
+        var protector = Model._dataProtectionProvider.CreateProtector("MySecretKey");
+        var decryptedCreditCard = protector.Unprotect(Model.CurrentUser.CreditCard);
+    }
+    <p>Decrypted Credit Card No: @decryptedCreditCard</p>
+
+    <p>Mobile No: @Model.CurrentUser.MobileNo</p>
+    <p>Billing Address: @Model.CurrentUser.BillingAddress</p>
+    <p>Shipping Address: @Model.CurrentUser.ShippingAddress</p>
+    <p>Password: @Model.CurrentUser.Password</p>
+</div>
+
+
+

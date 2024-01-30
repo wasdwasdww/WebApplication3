@@ -1,0 +1,38 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.password-strength-very-weak {
+    color: red;
+}
+
+.password-strength-weak {
+    color: orange;
+}
+
+.password-strength-medium {
+    color: yellow;
+}
+
+.password-strength-strong {
+    color: blue;
+}
+
+.password-strength-excellent {
+    color: green;
+}
